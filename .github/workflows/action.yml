@@ -1,0 +1,21 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+jobs:
+  setup:
+    name: Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "yarn"
+      - run: yarn install --frozen-lockfile --prefer-offline
+      - run: yarn format:check
+      - run: yarn lint:check
+      - run: yarn ts:check
+      - run: yarn test:run
+      - run: yarn build && yarn preview & yarn cypress:run
