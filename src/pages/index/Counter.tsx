@@ -7,7 +7,9 @@ export const Counter: FC = () => {
   return (
     <>
       <p>Count: {count}</p>
-      <Button onClick={() => setCount(count + 1)}>Increment</Button>
+      <Button type="button" onClick={() => setCount(count + 1)}>
+        Increment
+      </Button>
     </>
   );
 };
