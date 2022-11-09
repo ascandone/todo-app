@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
-import { Todo } from "src/models";
 import { TrashButton } from "src/components/TrashButton";
 import { CheckBox } from "src/components/CheckBox";
 import { Input } from "src/components/Input";
 import { Button } from "src/components/Button";
+import type { Todo } from "src/backend/router";
 
 export type TodoAppProps = {
   todos: Todo[];

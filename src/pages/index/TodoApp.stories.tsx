@@ -29,7 +29,7 @@ export const NotEmpty = Template.bind({
 });
 NotEmpty.args = {
   todos: [
-    { id: 0, text: "First todo", completed: false },
-    { id: 1, text: "Second todo", completed: true },
+    { id: 0, text: "First todo", completed: false, createdAt: new Date() },
+    { id: 1, text: "Second todo", completed: true, createdAt: new Date() },
   ],
 };
