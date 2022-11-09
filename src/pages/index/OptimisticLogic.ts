@@ -18,7 +18,6 @@ export class OptimisticLogic {
       id: randId,
       createdAt: new Date(),
     };
-    console.log({ newTodo });
 
     return [newTodo, ...todos];
   }
