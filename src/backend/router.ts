@@ -1,51 +1,43 @@
 import { initTRPC } from "@trpc/server";
 import { z } from "zod";
+import * as service from "./service";
 
 const t = initTRPC.create();
 
-export interface User {
-  id: number;
-  name: string;
-}
+const getTodos = t.procedure.query(() => service.getTodos());
 
-const userList: User[] = [
-  {
-    id: 1,
-    name: "KATT",
-  },
-];
+const createTodo = t.procedure
+  .input(
+    z.object({
+      text: z.string(),
+    })
+  )
+  .mutation((req) => service.addTodo(req.input));
 
-const userById = t.procedure
+const editTodo = t.procedure
+  .input(
+    z.object({
+      id: z.number(),
+      text: z.string().optional(),
+      completed: z.boolean().optional(),
+    })
+  )
+  .mutation((req) => service.editTodo(req.input.id, req.input));
+
+const deleteTodo = t.procedure
   .input(
     z.object({
       id: z.number(),
     })
   )
-  .query((req) => {
-    const input = req.input;
-    const user = userList.find((it) => it.id === input.id);
-    return user;
-  });
-
-const userCreate = t.procedure
-  .input(
-    z.object({
-      name: z.string(),
-    })
-  )
-  .mutation((req) => {
-    const id = Math.floor(Math.random() * 10000);
-    const user: User = {
-      id,
-      name: req.input.name,
-    };
-    userList.push(user);
-    return user;
-  });
+  .mutation((req) => service.deleteTodo(req.input.id));
 
 export const appRouter = t.router({
-  userById,
-  userCreate,
+  getTodos,
+  createTodo,
+  editTodo,
+  deleteTodo,
 });
 
 export type AppRouter = typeof appRouter;
+export type { Todo } from "@prisma/client";
