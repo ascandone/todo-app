@@ -9,9 +9,9 @@ export type TodoAppProps = {
   todos: Todo[];
 
   createTodo: (text: string) => void;
-  editTodo: (todo: Todo, text: string) => void;
-  toggleTodo: (todo: Todo, completed: boolean) => void;
-  deleteTodo: (todo: Todo) => void;
+  editTodo: (id: Todo["id"], text: string) => void;
+  toggleTodo: (id: Todo["id"], completed: boolean) => void;
+  deleteTodo: (id: Todo["id"]) => void;
 };
 
 const TodoItem: FC<{
@@ -128,9 +128,9 @@ export const TodoApp: FC<TodoAppProps> = ({
               <li key={todo.id}>
                 <TodoItem
                   todo={todo}
-                  onToggle={(completed) => toggleTodo(todo, completed)}
-                  onEditText={(value) => editTodo(todo, value)}
-                  onDelete={() => deleteTodo(todo)}
+                  onToggle={(completed) => toggleTodo(todo.id, completed)}
+                  onEditText={(value) => editTodo(todo.id, value)}
+                  onDelete={() => deleteTodo(todo.id)}
                 />
               </li>
             ))}

@@ -3,6 +3,7 @@ import { trpc } from "src/utils/trpc";
 import { Spinner } from "src/components/Spinner";
 import { TodoApp } from "src/pages/index/TodoApp";
 import type { Todo } from "src/backend/router";
+import { OptimisticLogic } from "./index/OptimisticLogic";
 
 export const LoadingScreen: FC = () => (
   <div className="flex items-center justify-center p-16">
@@ -12,91 +13,54 @@ export const LoadingScreen: FC = () => (
 
 export const ErrorScreen: FC = () => <div>Error!</div>;
 
+const optimisticLogic = new OptimisticLogic();
+
 export const IndexPage: FC = () => {
   const ctx = trpc.useContext();
 
   const todos = trpc.getTodos.useQuery();
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint, @typescript-eslint/no-explicit-any
+  const createMutationOptions = <Args extends any>(
+    logic: (oldTodos: Todo[], args: Args) => Todo[]
+  ) => ({
+    async onMutate(args: Args) {
+      await ctx.getTodos.cancel();
+      ctx.getTodos.setData(undefined, (oldTodos) =>
+        oldTodos === undefined ? undefined : logic(oldTodos, args)
+      );
+      return { previousTodos: todos.data };
+    },
+    onError(
+      _err: unknown,
+      _editedTodo: unknown,
+      mutateCtx: { previousTodos: Todo[] | undefined } | undefined
+    ) {
+      if (mutateCtx) {
+        ctx.getTodos.setData(undefined, mutateCtx.previousTodos);
+      }
+    },
+    onSettled() {
+      ctx.getTodos.invalidate();
+    },
+  });
+
   const createTodo = trpc.createTodo.useMutation({
-    async onMutate(editedTodo) {
-      await ctx.getTodos.cancel();
-
-      const randId = Math.ceil(Math.random() * 1e6);
-
-      const newTodo: Todo = {
-        text: editedTodo.text,
-        completed: false,
-        id: randId,
-        createdAt: new Date(),
-      };
-
-      ctx.getTodos.setData(undefined, (oldTodos) =>
-        oldTodos === undefined ? undefined : [newTodo, ...oldTodos]
-      );
-
-      return { previousTodos: todos.data };
-    },
-    onError(_err, _editedTodo, mutateCtx) {
-      if (mutateCtx) {
-        ctx.getTodos.setData(undefined, mutateCtx.previousTodos);
+    ...createMutationOptions(optimisticLogic.createTodo.bind(optimisticLogic)),
+    onSuccess(newTodo) {
+      if (todos.data) {
+        ctx.getTodos.setData(undefined, [newTodo, ...todos.data.slice(1)]);
       }
-    },
-    onSettled() {
-      ctx.getTodos.invalidate();
     },
   });
 
-  const editTodo = trpc.editTodo.useMutation({
-    async onMutate(editedTodo) {
-      await ctx.getTodos.cancel();
+  const editTodo = trpc.editTodo.useMutation(
+    createMutationOptions(optimisticLogic.editTodo.bind(optimisticLogic))
+  );
 
-      ctx.getTodos.setData(undefined, (oldTodos) =>
-        oldTodos === undefined
-          ? undefined
-          : oldTodos.map((oldTodo) =>
-              oldTodo.id === editedTodo.id
-                ? {
-                    ...oldTodo,
-                    text: editedTodo.text ?? oldTodo.text,
-                    completed: editedTodo.completed ?? oldTodo.completed,
-                  }
-                : oldTodo
-            )
-      );
-
-      return { previousTodos: todos.data };
-    },
-    onError(_err, _editedTodo, mutateCtx) {
-      if (mutateCtx) {
-        ctx.getTodos.setData(undefined, mutateCtx.previousTodos);
-      }
-    },
-    onSettled() {
-      ctx.getTodos.invalidate();
-    },
-  });
-
-  const deleteTodo = trpc.deleteTodo.useMutation({
-    async onMutate({ id }) {
-      await ctx.getTodos.cancel();
-
-      ctx.getTodos.setData(undefined, (oldTodos) =>
-        oldTodos === undefined
-          ? undefined
-          : oldTodos.filter((oldTodo) => oldTodo.id !== id)
-      );
-
-      return { previousTodos: todos.data };
-    },
-    onError(_err, _editedTodo, mutateCtx) {
-      if (mutateCtx) {
-        ctx.getTodos.setData(undefined, mutateCtx.previousTodos);
-      }
-    },
-    onSettled() {
-      ctx.getTodos.invalidate();
-    },
-  });
+  const deleteTodo = trpc.deleteTodo.useMutation(
+    createMutationOptions(optimisticLogic.deleteTodo.bind(optimisticLogic))
+  );
 
   if (todos.isLoading) {
     return <LoadingScreen />;
@@ -110,17 +74,17 @@ export const IndexPage: FC = () => {
     <div className="p-5">
       <TodoApp
         todos={todos.data}
-        createTodo={(text: string) => {
+        createTodo={(text) => {
           createTodo.mutate({ text });
         }}
-        editTodo={(todo: Todo, text: string) => {
-          editTodo.mutate({ ...todo, text });
+        editTodo={(id, text) => {
+          editTodo.mutate({ id, text });
         }}
-        toggleTodo={(todo: Todo, completed: boolean) => {
-          editTodo.mutate({ ...todo, completed });
+        toggleTodo={(id, completed) => {
+          editTodo.mutate({ id, completed });
         }}
-        deleteTodo={(todo: Todo) => {
-          deleteTodo.mutate(todo);
+        deleteTodo={(id) => {
+          deleteTodo.mutate({ id });
         }}
       />
     </div>
