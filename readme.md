@@ -1,4 +1,4 @@
-A boilerplate template using the following stack:
+A simple app using the following tools:
 
 - [react](https://reactjs.org/)
 - [vitejs](https://vitejs.dev/)
@@ -11,3 +11,7 @@ A boilerplate template using the following stack:
 
 - [prettier](https://prettier.io/)
 - [eslint](https://eslint.org/)
+
+- [zod](https://zod.dev/)
+- [trpc](https://trpc.io/)
+- [react-query](https://tanstack.com/query/v4/?from=reactQueryV3)
