@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "vercel-build": "echo VERCEL_BUILD",
+    "vercel-build": "prisma generate && prisma migrate deploy && npm run build",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --port 3000",
