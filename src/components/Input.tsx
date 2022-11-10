@@ -29,7 +29,7 @@ export const Input: FC<InputProps> = ({
   return (
     <div className="max-w-md">
       {label === undefined ? null : (
-        <label className="text-gray-600 mb-1 block text-sm" htmlFor={id}>
+        <label className="text-slate-700 mb-1 block text-sm" htmlFor={id}>
           {label}
         </label>
       )}

@@ -43,7 +43,7 @@ const TodoItem: FC<{
     <div
       className={`
         inline-flex items-center w-full
-        transition-opacity duration-200 ease-in-out hover:bg-zinc-50 
+        transition-opacity duration-200 ease-in-out hover:bg-slate-50 
         py-2 px-4 -mx-4 rounded-md
         ${todo.completed ? "opacity-50" : ""}
         `}

@@ -47,7 +47,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loginState }) => {
 
       <div className="h-10"></div>
       <div className="flex justify-end">
-        <Button {...disabled} fullWidth type="submit">
+        <Button {...disabled} raised fullWidth type="submit">
           Login
         </Button>
       </div>

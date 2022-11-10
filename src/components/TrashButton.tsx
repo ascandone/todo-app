@@ -9,7 +9,7 @@ export const TrashButton: FC<{
     type="button"
     aria-label={ariaLabel}
     onClick={onClick}
-    className="group-hover:block inline hover:bg-zinc-900 hover:text-zinc-200 rounded-md p-1 -m-1"
+    className="group-hover:block inline hover:bg-slate-900 hover:text-zinc-200 rounded-md p-1 -m-1"
   >
     <TrashIcon className="h-5 w-5" />
   </button>
