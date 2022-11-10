@@ -1,21 +1,53 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { CenterForm } from "src/components/CenterForm";
-import { RegisterForm, RegisterFormProps } from "src/pages/register/Form";
+import {
+  RegisterForm,
+  RegisterFormProps,
+  RegisterState,
+} from "src/pages/register/Form";
+import { useAuth } from "src/providers/Auth";
 import { trpc } from "src/utils/trpc";
 
 export const RegisterPageUi: FC<{
+  registerState: RegisterState;
   onSubmit: RegisterFormProps["onSubmit"];
-}> = ({ onSubmit }) => (
+}> = ({ onSubmit, registerState }) => (
   <CenterForm header="Create account">
-    <RegisterForm onSubmit={onSubmit} />
+    <RegisterForm registerState={registerState} onSubmit={onSubmit} />
   </CenterForm>
 );
 
 export const RegisterPage: FC = () => {
-  const registerUser = trpc.registerUser.useMutation();
+  const auth = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (auth.credentials !== undefined) {
+      navigate("/");
+    }
+  }, [auth.credentials]);
+
+  const registerUser = trpc.registerUser.useMutation({
+    onSuccess(user) {
+      if (user) {
+        auth.login(user);
+      }
+    },
+  });
+
+  const registerState: RegisterState = (() => {
+    if (registerUser.isLoading) {
+      return { type: "submitting" };
+    } else if (registerUser.isError) {
+      return { type: "error" };
+    } else {
+      return { type: "idle" };
+    }
+  })();
 
   return (
     <RegisterPageUi
+      registerState={registerState}
       onSubmit={(data) => {
         registerUser.mutate(data);
       }}
