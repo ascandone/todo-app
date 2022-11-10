@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "vercel-dev": "vite --port $PORT",
+    "vdev": "vercel dev --local-config ./vercel-dev.json",
     "vercel-build": "prisma generate && prisma migrate deploy && npm run build",
     "dev": "vite",
     "build": "vite build",
