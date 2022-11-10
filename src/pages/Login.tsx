@@ -10,7 +10,6 @@ export const LoginPageUi: FC<{
   onSubmit: LoginFormProps["onSubmit"];
 }> = ({ onSubmit, loginState }) => (
   <CenterForm header="Login">
-    <div className="h-5"></div>
     <LoginForm loginState={loginState} onSubmit={onSubmit} />
   </CenterForm>
 );

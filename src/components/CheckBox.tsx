@@ -19,7 +19,7 @@ export const CheckBox: FC<{
       type="button"
       onClick={() => onToggle(!value)}
       className={classNames(
-        "cursor-pointer border border-zinc-300 rounded-md shadow-sm w-5 h-5 flex items-center justify-center hover:ring-2 ring-sky-200 ring-offset-1",
+        "cursor-pointer border border-slate-300 rounded-md shadow-sm w-5 h-5 flex items-center justify-center hover:ring-2 ring-sky-200 ring-offset-1",
         "transition-colors duration-150 ease-in-out",
         {
           "bg-sky-900 border-sky-900": value,

@@ -12,6 +12,7 @@ export type ButtonProps = {
   fullWidth?: boolean;
   variant?: Variant;
   disabled?: boolean;
+  raised?: boolean;
 } & ButtonType;
 
 export const Button: FC<ButtonProps> = ({
@@ -21,6 +22,7 @@ export const Button: FC<ButtonProps> = ({
   disabled = false,
   fullWidth = false,
   variant = "primary",
+  raised,
 }) => (
   <button
     onClick={onClick}
@@ -35,10 +37,12 @@ export const Button: FC<ButtonProps> = ({
       {
         "w-full": fullWidth,
 
-        "bg-zinc-800 text-white hover:bg-opacity-90 disabled:bg-zinc-600":
+        "bg-slate-900 text-white hover:bg-opacity-90 disabled:bg-slate-600":
           variant === "primary",
 
-        "bg-white text-gray-900 hover:bg-zinc-50 border shadow-sm disabled:bg-zinc-100":
+        "shadow-lg": variant === "primary" && raised,
+
+        "bg-white text-gray-900 hover:bg-slate-50 border shadow-sm disabled:bg-slate-100":
           variant === "ghost",
       }
     )}
