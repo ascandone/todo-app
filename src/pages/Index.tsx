@@ -10,6 +10,7 @@ import {
 } from "src/providers/Auth";
 import { Button } from "src/components/Button";
 import { Todo } from "src/backend/service";
+import { pluralizeWord } from "src/utils/misc";
 
 export const LoadingScreen: FC = () => (
   <div className="flex items-center justify-center p-16">
@@ -100,7 +101,8 @@ const AuthenticatedPage: FC<{
             </h2>
             <div className="h-2"></div>
             <p className="font-xs text-gray-500">
-              You&apos;ve got {itemsLeft} tasks left{" "}
+              You&apos;ve got {itemsLeft} {pluralizeWord(itemsLeft, "task")}{" "}
+              left{" "}
             </p>
           </div>
           <div>
