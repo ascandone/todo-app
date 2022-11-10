@@ -47,9 +47,13 @@ export const IndexPage: FC = () => {
 
   const createTodo = trpc.createTodo.useMutation({
     ...createMutationOptions(optimisticLogic.createTodo.bind(optimisticLogic)),
-    onSuccess(newTodo) {
-      if (todos.data) {
-        ctx.getTodos.setData(undefined, [newTodo, ...todos.data.slice(1)]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onSuccess(newTodo, _virtualTodo, mutationCtx) {
+      if (mutationCtx?.previousTodos) {
+        ctx.getTodos.setData(undefined, [
+          newTodo,
+          ...mutationCtx.previousTodos,
+        ]);
       }
     },
   });
@@ -75,7 +79,8 @@ export const IndexPage: FC = () => {
       <TodoApp
         todos={todos.data}
         createTodo={(text) => {
-          createTodo.mutate({ text });
+          // TODO remove hardcoded userId
+          createTodo.mutate({ text, userId: 1 });
         }}
         editTodo={(id, text) => {
           editTodo.mutate({ id, text });
