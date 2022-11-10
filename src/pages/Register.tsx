@@ -7,7 +7,6 @@ export const RegisterPageUi: FC<{
   onSubmit: RegisterFormProps["onSubmit"];
 }> = ({ onSubmit }) => (
   <CenterForm header="Create account">
-    <div className="h-5"></div>
     <RegisterForm onSubmit={onSubmit} />
   </CenterForm>
 );
