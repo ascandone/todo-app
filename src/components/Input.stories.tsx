@@ -13,3 +13,6 @@ Default.args = { placeholder: "Placeholder" };
 
 export const Labeled = Template.bind({});
 Labeled.args = { placeholder: "Placeholder", label: "Label example" };
+
+export const Disabled = Template.bind({});
+Disabled.args = { placeholder: "Placeholder", disabled: true };

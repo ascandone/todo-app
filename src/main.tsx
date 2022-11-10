@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { trpc } from "src/utils/trpc";
 import { router } from "src/router";
+import { AuthProvider } from "src/providers/Auth";
+
 import "./index.css";
 
 const BASE_URL = "http://localhost:3000";
@@ -16,12 +18,6 @@ const App = () => {
       links: [
         httpBatchLink({
           url: `${BASE_URL}/api/trpc`,
-          // optional
-          // headers() {
-          //   return {
-          //     authorization: getAuthCookie(),
-          //   };
-          // },
         }),
       ],
     })
@@ -30,9 +26,11 @@ const App = () => {
   return (
     <React.StrictMode>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
+        </AuthProvider>
       </trpc.Provider>
     </React.StrictMode>
   );

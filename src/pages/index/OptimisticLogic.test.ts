@@ -5,13 +5,11 @@ describe("editTodo", () => {
   test("should be a noop when no args are passed", () => {
     const logic = new OptimisticLogic();
 
-    const createdAt = new Date();
-
     expect(
-      logic.editTodo([{ text: "abc", id: 0, completed: false, createdAt }], {
+      logic.editTodo([{ text: "abc", id: 0, completed: false }], {
         id: 0,
       })
-    ).toEqual([{ text: "abc", id: 0, completed: false, createdAt }]);
+    ).toEqual([{ text: "abc", id: 0, completed: false }]);
   });
 
   test("should be able to change the completed field", () => {
@@ -20,7 +18,7 @@ describe("editTodo", () => {
     const createdAt = new Date();
 
     expect(
-      logic.editTodo([{ text: "abc", id: 0, completed: false, createdAt }], {
+      logic.editTodo([{ text: "abc", id: 0, completed: false }], {
         id: 0,
         completed: true,
       })
@@ -34,7 +32,13 @@ describe("deleteTodo", () => {
 
     expect(
       logic.deleteTodo(
-        [{ text: "abc", id: 0, completed: false, createdAt: new Date() }],
+        [
+          {
+            text: "abc",
+            id: 0,
+            completed: false,
+          },
+        ],
         { id: 0 }
       )
     ).toEqual([]);

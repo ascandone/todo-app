@@ -2,8 +2,14 @@ import { FC } from "react";
 import { trpc } from "src/utils/trpc";
 import { Spinner } from "src/components/Spinner";
 import { TodoApp } from "src/pages/index/TodoApp";
-import type { Todo } from "src/backend/router";
 import { OptimisticLogic } from "./index/OptimisticLogic";
+import {
+  AuthCredentials,
+  AuthStatus,
+  useProtectedRoute,
+} from "src/providers/Auth";
+import { Button } from "src/components/Button";
+import { Todo } from "src/backend/service";
 
 export const LoadingScreen: FC = () => (
   <div className="flex items-center justify-center p-16">
@@ -15,10 +21,16 @@ export const ErrorScreen: FC = () => <div>Error!</div>;
 
 const optimisticLogic = new OptimisticLogic();
 
-export const IndexPage: FC = () => {
+const AuthenticatedPage: FC<{
+  auth: AuthStatus & { credentials: AuthCredentials };
+}> = ({ auth }) => {
   const ctx = trpc.useContext();
 
-  const todos = trpc.getTodos.useQuery();
+  const todosArgs = {
+    authToken: auth.credentials.authToken,
+  };
+
+  const todos = trpc.getTodos.useQuery(todosArgs);
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint, @typescript-eslint/no-explicit-any
   const createMutationOptions = <Args extends any>(
@@ -26,7 +38,7 @@ export const IndexPage: FC = () => {
   ) => ({
     async onMutate(args: Args) {
       await ctx.getTodos.cancel();
-      ctx.getTodos.setData(undefined, (oldTodos) =>
+      ctx.getTodos.setData(todosArgs, (oldTodos) =>
         oldTodos === undefined ? undefined : logic(oldTodos, args)
       );
       return { previousTodos: todos.data };
@@ -37,7 +49,7 @@ export const IndexPage: FC = () => {
       mutateCtx: { previousTodos: Todo[] | undefined } | undefined
     ) {
       if (mutateCtx) {
-        ctx.getTodos.setData(undefined, mutateCtx.previousTodos);
+        ctx.getTodos.setData(todosArgs, mutateCtx.previousTodos);
       }
     },
     onSettled() {
@@ -50,7 +62,7 @@ export const IndexPage: FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onSuccess(newTodo, _virtualTodo, mutationCtx) {
       if (mutationCtx?.previousTodos) {
-        ctx.getTodos.setData(undefined, [
+        ctx.getTodos.setData(todosArgs, [
           newTodo,
           ...mutationCtx.previousTodos,
         ]);
@@ -74,13 +86,34 @@ export const IndexPage: FC = () => {
     return <ErrorScreen />;
   }
 
+  // TODO properly pluralize "tasks"
+  const itemsLeft = todos.data.filter((todo) => !todo.completed).length;
+
   return (
     <div className="p-5">
+      <div className="mx-auto max-w-md pt-2">
+        <div className="flex justify-between items-start">
+          {/* Data */}
+          <div>
+            <h2 className="text-xl font-medium text-gray-800">
+              Hello, {auth.credentials.username}
+            </h2>
+            <div className="h-2"></div>
+            <p className="font-xs text-gray-500">
+              You&apos;ve got {itemsLeft} tasks left{" "}
+            </p>
+          </div>
+          <div>
+            <Button variant="ghost" type="button" onClick={() => auth.logout()}>
+              Logout
+            </Button>
+          </div>
+        </div>
+      </div>
       <TodoApp
         todos={todos.data}
         createTodo={(text) => {
-          // TODO remove hardcoded userId
-          createTodo.mutate({ text, userId: 1 });
+          createTodo.mutate({ text, authToken: auth.credentials.authToken });
         }}
         editTodo={(id, text) => {
           editTodo.mutate({ id, text });
@@ -94,4 +127,17 @@ export const IndexPage: FC = () => {
       />
     </div>
   );
+};
+
+export const IndexPage = () => {
+  const auth = useProtectedRoute();
+
+  if (auth.credentials === undefined) {
+    return null;
+  }
+
+  // TODO why is it not working?
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return <AuthenticatedPage auth={auth} />;
 };

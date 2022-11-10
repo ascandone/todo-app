@@ -15,7 +15,6 @@ test("it should render the items", () => {
           id: 0,
           text,
           completed: false,
-          createdAt: new Date(),
         },
       ]}
       createTodo={noop}

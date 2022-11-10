@@ -3,7 +3,7 @@ import { TrashButton } from "src/components/TrashButton";
 import { CheckBox } from "src/components/CheckBox";
 import { Input } from "src/components/Input";
 import { Button } from "src/components/Button";
-import type { Todo } from "src/backend/router";
+import { Todo } from "src/backend/service";
 
 export type TodoAppProps = {
   todos: Todo[];
@@ -97,13 +97,15 @@ export const TodoForm: FC<{ onSubmit: (value: string) => void }> = ({
           onSubmit(value);
         }}
       >
-        <Input
-          value={value}
-          onInput={setValue}
-          autofocus
-          placeholder="Add a todo"
-          name="todo"
-        />
+        <div className="flex-1">
+          <Input
+            value={value}
+            onInput={setValue}
+            autofocus
+            placeholder="Add a todo"
+            name="todo"
+          />
+        </div>
         <Button type="submit">Add item</Button>
       </form>
     </>
@@ -118,7 +120,7 @@ export const TodoApp: FC<TodoAppProps> = ({
   editTodo,
 }) => {
   return (
-    <div className="mx-auto max-w-lg py-6 px-4 antialiased">
+    <div className="mx-auto max-w-md py-6 antialiased">
       <TodoForm onSubmit={createTodo} />
       {todos.length === 0 ? null : (
         <div>

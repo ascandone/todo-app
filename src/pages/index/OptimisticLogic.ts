@@ -1,4 +1,4 @@
-import { Todo } from "src/backend/router";
+import { Todo } from "src/backend/service";
 import type { TodoAppProps } from "./TodoApp";
 
 type Todos = TodoAppProps["todos"];
@@ -16,7 +16,6 @@ export class OptimisticLogic {
       text,
       completed: false,
       id: randId,
-      createdAt: new Date(),
     };
 
     return [newTodo, ...todos];

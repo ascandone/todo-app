@@ -1,12 +1,17 @@
+import classNames from "classnames";
 import { FC, useId } from "react";
+
+export type Type = "text" | "password" | "email";
 
 export type InputProps = {
   value: string;
   onInput: (value: string) => void;
+  type?: Type;
   placeholder?: string;
   autofocus?: boolean;
   name?: string;
   label?: string;
+  disabled?: boolean;
 };
 
 export const Input: FC<InputProps> = ({
@@ -16,6 +21,8 @@ export const Input: FC<InputProps> = ({
   autofocus,
   name,
   label,
+  disabled = false,
+  type = "text",
 }) => {
   const id = useId();
 
@@ -27,15 +34,20 @@ export const Input: FC<InputProps> = ({
         </label>
       )}
       <input
+        disabled={disabled}
         id={id}
         value={value}
         onChange={(e) => onInput(e.target.value)}
-        type="text"
+        type={type}
         placeholder={placeholder}
         autoFocus={autofocus}
         name={name}
         autoComplete="off"
-        className="border w-full rounded shadow-sm focus:ring ring-sky-200 focus:border-sky-600 focus:ring-opacity-50 focus:outline-none py-2 px-3"
+        className={classNames(
+          "border py-2 px-3 w-full rounded shadow-sm hover:border-sky-300",
+          "transition-color duration-150",
+          "hover:ring focus:ring active:ring-0 ring-sky-200 focus:border-sky-400 outline-none"
+        )}
       />
     </div>
   );

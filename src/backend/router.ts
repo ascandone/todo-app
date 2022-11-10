@@ -4,12 +4,19 @@ import * as service from "./service";
 
 const t = initTRPC.create();
 
-const getTodos = t.procedure.query(() => service.getTodos());
+const getTodos = t.procedure
+  .input(
+    z.object({
+      authToken: z.string(),
+    })
+  )
+  .query((req) => service.getTodos(req.input));
 
 const createTodo = t.procedure
   .input(
     z.object({
       text: z.string(),
+      authToken: z.string(),
     })
   )
   .mutation((req) => service.addTodo(req.input));
@@ -32,12 +39,32 @@ const deleteTodo = t.procedure
   )
   .mutation((req) => service.deleteTodo(req.input.id));
 
+const registerUser = t.procedure
+  .input(
+    z.object({
+      username: z.string(),
+      password: z.string(),
+    })
+  )
+  .mutation((req) => service.createUser(req.input));
+
+const loginUser = t.procedure
+  .input(
+    z.object({
+      username: z.string(),
+      password: z.string(),
+    })
+  )
+  .mutation((req) => service.loginUser(req.input));
+
 export const appRouter = t.router({
   getTodos,
   createTodo,
   editTodo,
   deleteTodo,
+
+  loginUser,
+  registerUser,
 });
 
 export type AppRouter = typeof appRouter;
-export type { Todo } from "@prisma/client";
