@@ -4,12 +4,20 @@ import { LoginForm, LoginFormProps, LoginState } from "src/pages/login/Form";
 import { trpc } from "src/utils/trpc";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "src/providers/Auth";
+import { Link } from "src/components/Link";
 
 export const LoginPageUi: FC<{
   loginState: LoginState;
   onSubmit: LoginFormProps["onSubmit"];
 }> = ({ onSubmit, loginState }) => (
-  <CenterForm header="Login">
+  <CenterForm
+    header="Log in"
+    bottom={
+      <>
+        Don&apos;t have an account? <Link href="/register">Sign up</Link>
+      </>
+    }
+  >
     <LoginForm loginState={loginState} onSubmit={onSubmit} />
   </CenterForm>
 );
