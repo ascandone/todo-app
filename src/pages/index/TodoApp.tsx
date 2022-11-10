@@ -55,7 +55,7 @@ const TodoItem: FC<{
       />
       <span className="mx-4 flex-1 cursor-pointer" onClick={openDraft}>
         {draft === undefined ? (
-          todo.text
+          <div className="border-b-2 border-transparent">{todo.text}</div>
         ) : (
           <input
             ref={(el) => {
@@ -73,7 +73,7 @@ const TodoItem: FC<{
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             id="todo-edit-input"
-            className="border-b bg-transparent focus:border-sky-200 w-full outline-none"
+            className="border-b-2 bg-transparent focus:border-slate-300 w-full outline-none"
           />
         )}
       </span>

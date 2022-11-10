@@ -31,7 +31,7 @@ export const Button: FC<ButtonProps> = ({
     type={type}
     className={cls(
       "font-semibold transition-colors duration-100 rounded px-3 py-2 leading-none",
-      "focus:ring-1 ring-sky-400 focus:outline-none ring-offset-2",
+      "focus:ring ring-slate-300 focus:outline-none ring-offset-2",
       "active:scale-[0.99] transition-transform duration-100 ease-in-out",
 
       {

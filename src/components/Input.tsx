@@ -44,9 +44,9 @@ export const Input: FC<InputProps> = ({
         name={name}
         autoComplete="off"
         className={classNames(
-          "border py-2 px-3 w-full rounded shadow-sm hover:border-sky-300",
+          "border py-2 px-3 w-full rounded shadow-sm hover:border-slate-300",
           "transition-color duration-150",
-          "hover:ring focus:ring active:ring-0 ring-sky-200 focus:border-sky-400 outline-none"
+          "hover:ring focus:ring active:ring-0 ring-slate-300 focus:border-slate-400 outline-none"
         )}
       />
     </div>
