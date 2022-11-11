@@ -40,50 +40,50 @@ export const TodoItem: FC<{
   };
 
   return (
-    <div
-      className={`
-        inline-flex items-center w-full text-zinc-800
-        py-2 px-4 -mx-4 rounded-md  hover:bg-slate-50 
-        transition-opacity 
-        ${todo.completed ? "delay-150 duration-500 opacity-50" : "duration-300"}
-        `}
-    >
-      <CheckBox
-        ariaLabel="Toggle item"
-        checked={todo.completed}
-        onToggle={onToggle}
-      />
-      <span
-        className="mx-4 flex-1 cursor-pointer inline-flex"
-        onClick={openDraft}
-      >
-        {draft === undefined ? (
-          <div className="border-b-2 border-transparent relative">
-            <LineThrough completed={todo.completed} />
-            {todo.text}
-          </div>
-        ) : (
-          <input
-            ref={(el) => {
-              el?.focus();
-            }}
-            onBlur={saveDraft}
-            onKeyDown={(e) => {
-              if (e.key === "Escape") {
-                discardDraft();
-              } else if (e.key === "Enter") {
-                saveDraft();
-              }
-            }}
-            type="text"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            id="todo-edit-input"
-            className="border-b-2 bg-transparent focus:border-slate-300 w-full outline-none"
-          />
+    <div className="py-2 px-4 -mx-4 rounded-md  hover:bg-slate-50">
+      <div
+        className={classNames(
+          "transition-opacity w-full inline-flex items-center text-zinc-800",
+          todo.completed ? "delay-150 duration-500 opacity-50" : "duration-300"
         )}
-      </span>
-      <TrashButton ariaLabel="Delete the item" onClick={onDelete} />
+      >
+        <CheckBox
+          ariaLabel="Toggle item"
+          checked={todo.completed}
+          onToggle={onToggle}
+        />
+        <span
+          className="mx-4 flex-1 cursor-pointer inline-flex"
+          onClick={openDraft}
+        >
+          {draft === undefined ? (
+            <div className="border-b-2 border-transparent relative">
+              <LineThrough completed={todo.completed} />
+              {todo.text}
+            </div>
+          ) : (
+            <input
+              ref={(el) => {
+                el?.focus();
+              }}
+              onBlur={saveDraft}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  discardDraft();
+                } else if (e.key === "Enter") {
+                  saveDraft();
+                }
+              }}
+              type="text"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              id="todo-edit-input"
+              className="border-b-2 bg-transparent focus:border-slate-300 w-full outline-none"
+            />
+          )}
+        </span>
+        <TrashButton ariaLabel="Delete the item" onClick={onDelete} />
+      </div>
     </div>
   );
 };
