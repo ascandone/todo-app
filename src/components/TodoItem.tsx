@@ -7,9 +7,9 @@ import type { Todo } from "src/backend/service";
 const LineThrough: FC<{ completed: boolean }> = ({ completed }) => (
   <div
     className={classNames(
-      "h-0.5 rounded-full bg-slate-800 absolute top-1/2 mt-px left-0 -translate-y-1/2 z-10",
-      "transition-all duration-150 ease-in-out",
-      completed ? "w-full" : "w-0"
+      "rounded-full bg-slate-800 absolute top-1/2 mt-px left-0 -translate-y-1/2 z-10",
+      "transition-all duration-200 ease-[cubic-bezier(0.63,-0.42,0.43,1.26)]",
+      completed ? "w-full h-0.5" : "w-0 h-1"
     )}
   ></div>
 );
