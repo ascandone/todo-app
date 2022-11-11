@@ -4,6 +4,9 @@ import { LoginPageUi as Component } from "./Login";
 export default {
   title: "Page/Login",
   component: Component,
+  parameters: {
+    layout: "fullscreen",
+  },
 } as Meta<typeof Component>;
 
 const Template: StoryFn<typeof Component> = (args) => <Component {...args} />;

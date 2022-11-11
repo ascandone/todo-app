@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CenterForm } from "src/components/CenterForm";
+import { Link } from "src/components/Link";
 import {
   RegisterForm,
   RegisterFormProps,
@@ -13,7 +14,14 @@ export const RegisterPageUi: FC<{
   registerState: RegisterState;
   onSubmit: RegisterFormProps["onSubmit"];
 }> = ({ onSubmit, registerState }) => (
-  <CenterForm header="Create account">
+  <CenterForm
+    header="Create account"
+    bottom={
+      <>
+        Already have an account? <Link href="/login">Log in</Link>
+      </>
+    }
+  >
     <RegisterForm registerState={registerState} onSubmit={onSubmit} />
   </CenterForm>
 );
