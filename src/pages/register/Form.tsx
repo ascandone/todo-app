@@ -27,12 +27,12 @@ export const RegisterForm: FC<RegisterFormProps> = ({
     }
   };
 
-  const disabled = { disabled: registerState.type === "submitting" } as const;
+  const submitting = registerState.type === "submitting";
 
   return (
     <form onSubmit={handleSubmit}>
       <Input
-        {...disabled}
+        disabled={submitting}
         label="Username"
         placeholder="username"
         value={username}
@@ -40,7 +40,7 @@ export const RegisterForm: FC<RegisterFormProps> = ({
       />
       <div className="h-6"></div>
       <Input
-        {...disabled}
+        disabled={submitting}
         label="Password"
         type="password"
         placeholder="••••••"
@@ -50,7 +50,13 @@ export const RegisterForm: FC<RegisterFormProps> = ({
 
       <div className="h-10"></div>
       <div className="flex justify-end">
-        <Button {...disabled} raised fullWidth type="submit">
+        <Button
+          loading={submitting}
+          disabled={submitting}
+          raised
+          fullWidth
+          type="submit"
+        >
           Register
         </Button>
       </div>

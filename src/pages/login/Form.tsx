@@ -24,12 +24,12 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loginState }) => {
     }
   };
 
-  const disabled = { disabled: loginState.type === "submitting" } as const;
+  const submitting = loginState.type === "submitting";
 
   return (
     <form onSubmit={handleSubmit}>
       <Input
-        {...disabled}
+        disabled={submitting}
         label="Username"
         placeholder="username"
         value={username}
@@ -37,7 +37,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loginState }) => {
       />
       <div className="h-6"></div>
       <Input
-        {...disabled}
+        disabled={submitting}
         label="Password"
         type="password"
         placeholder="••••••"
@@ -47,7 +47,13 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loginState }) => {
 
       <div className="h-10"></div>
       <div className="flex justify-end">
-        <Button {...disabled} raised fullWidth type="submit">
+        <Button
+          disabled={submitting}
+          loading={submitting}
+          raised
+          fullWidth
+          type="submit"
+        >
           Log in
         </Button>
       </div>
