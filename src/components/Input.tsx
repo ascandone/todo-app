@@ -33,7 +33,7 @@ export const Input: FC<InputProps> = ({
       {label === undefined ? null : (
         <label
           className={classNames(
-            "mb-1 block text-sm",
+            "mb-1 block",
             error === undefined ? "text-slate-700" : "text-red-700"
           )}
           htmlFor={id}
@@ -60,6 +60,11 @@ export const Input: FC<InputProps> = ({
             : "ring-red-200 border-red-300 hover:border-red-400 "
         )}
       />
+      {error === undefined ? (
+        error
+      ) : (
+        <p className="text-sm mt-1 text-red-600">{error}</p>
+      )}
     </div>
   );
 };
