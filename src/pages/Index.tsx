@@ -8,9 +8,9 @@ import {
   AuthStatus,
   useProtectedRoute,
 } from "src/providers/Auth";
-import { Button } from "src/components/Button";
 import { Todo } from "src/backend/service";
 import { pluralizeWord } from "src/utils/misc";
+import { DropdownMenu } from "src/components/DropdownMenu";
 
 export const LoadingScreen: FC = () => (
   <div className="flex items-center justify-center p-16">
@@ -106,9 +106,10 @@ const AuthenticatedPage: FC<{
             </p>
           </div>
           <div>
-            <Button variant="ghost" type="button" onClick={() => auth.logout()}>
+            <DropdownMenu />
+            {/* <Button variant="ghost" type="button" onClick={() => auth.logout()}>
               Logout
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
