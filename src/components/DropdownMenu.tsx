@@ -8,8 +8,7 @@ import {
 import { Transition } from "@headlessui/react";
 import { Link } from "./Link";
 
-// TODO abstract TrashIcon, IconButton
-export const IconButton: FC<{ onClick: VoidFunction }> = ({ onClick }) => (
+const IconButton: FC<{ onClick: VoidFunction }> = ({ onClick }) => (
   <button
     onClick={onClick}
     type="button"
@@ -25,20 +24,20 @@ export const Menu: FC<{ children: ReactNode }> = ({ children }) => (
   </div>
 );
 
-const MenuItem: FC<{ icon: ReactNode; children: ReactNode }> = ({
-  icon,
-  children,
-}) => (
+const MenuItem: FC<{
+  icon: FC<{ className: string }>;
+  children: ReactNode;
+}> = ({ icon: Icon, children }) => (
   <button
     type="button"
-    className="flex gap-x-4 text-gray-800 transition-colors duration-100 hover:bg-gray-100 rounded py-2 px-2 w-full"
+    className="flex gap-x-4 text-gray-800 transition-colors duration-150 hover:bg-gray-100 rounded py-2 px-2 w-full"
   >
-    <span>{icon}</span>
+    <span>
+      <Icon className="h-6" />
+    </span>
     <span>{children}</span>
   </button>
 );
-
-const HEIGHT = 24;
 
 export const DropdownMenu: FC = () => {
   const [opened, setOpened] = useState(false);
@@ -64,13 +63,9 @@ export const DropdownMenu: FC = () => {
         >
           <div className="absolute right-0 z-40">
             <Menu>
-              <MenuItem icon={<UserIcon height={HEIGHT} />}>Account</MenuItem>
-              <MenuItem icon={<Cog6ToothIcon height={HEIGHT} />}>
-                Settings
-              </MenuItem>
-              <MenuItem icon={<ArrowRightOnRectangleIcon height={HEIGHT} />}>
-                Log out
-              </MenuItem>
+              <MenuItem icon={UserIcon}>Account</MenuItem>
+              <MenuItem icon={Cog6ToothIcon}>Settings</MenuItem>
+              <MenuItem icon={ArrowRightOnRectangleIcon}>Log out</MenuItem>
 
               <hr className="my-2" />
 

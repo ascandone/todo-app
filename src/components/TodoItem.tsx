@@ -1,8 +1,9 @@
 import { FC, useState } from "react";
 import classNames from "classnames";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { CheckBox } from "src/components/CheckBox";
-import { TrashButton } from "src/components/TrashButton";
 import type { Todo } from "src/backend/service";
+import { IconButton } from "src/components/IconButton";
 
 const LineThrough: FC<{ completed: boolean }> = ({ completed }) => (
   <div
@@ -82,7 +83,12 @@ export const TodoItem: FC<{
             />
           )}
         </span>
-        <TrashButton ariaLabel="Delete the item" onClick={onDelete} />
+        <IconButton
+          dark
+          icon={TrashIcon}
+          ariaLabel="Delete the item"
+          onClick={onDelete}
+        />
       </div>
     </div>
   );

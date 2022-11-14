@@ -1,5 +1,6 @@
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { StoryFn, Meta } from "@storybook/react";
-import { TrashButton as Component } from "./TrashButton";
+import { IconButton as Component } from "./IconButton";
 
 export default {
   title: "Component/TrashButton",
@@ -9,3 +10,7 @@ export default {
 const Template: StoryFn<typeof Component> = (args) => <Component {...args} />;
 
 export const Default = Template.bind({});
+Default.args = {
+  onClick() {},
+  icon: TrashIcon,
+};
