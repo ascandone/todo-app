@@ -1,4 +1,4 @@
-import { FC, Fragment, ReactNode, useState } from "react";
+import { FC, Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { Transition } from "@headlessui/react";
 
@@ -12,11 +12,42 @@ const IconButton: FC<{ onClick: VoidFunction }> = ({ onClick }) => (
   </button>
 );
 
-export const Menu: FC<{ children: ReactNode }> = ({ children }) => (
-  <div className="w-64 shadow-soft rounded-lg px-2 py-2 bg-white">
-    {children}
-  </div>
-);
+const Menu: FC<{ children: ReactNode; onClickOutside: VoidFunction }> = ({
+  children,
+  onClickOutside,
+}) => {
+  const menuRef = useRef<HTMLElement | null>();
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (
+        e.target &&
+        menuRef.current &&
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        !menuRef.current.contains(e.target)
+      ) {
+        onClickOutside();
+      }
+    };
+
+    window.addEventListener("click", handler);
+    return () => {
+      window.removeEventListener("click", handler);
+    };
+  }, [menuRef, onClickOutside]);
+
+  return (
+    <div
+      ref={(el) => {
+        menuRef.current = el;
+      }}
+      className="w-64 shadow-soft rounded-lg px-2 py-2 bg-white"
+    >
+      {children}
+    </div>
+  );
+};
 
 export type MenuItemType =
   | { type: "link"; to: string }
@@ -62,7 +93,7 @@ export const DropdownMenu: FC<{ children: ReactNode }> = ({ children }) => {
           leaveTo="transform opacity-0 scale-95"
         >
           <div className="absolute right-0 z-40">
-            <Menu>{children}</Menu>
+            <Menu onClickOutside={() => setOpened(false)}>{children}</Menu>
           </div>
         </Transition>
       </span>

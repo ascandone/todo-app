@@ -9,7 +9,11 @@ export default {
   },
 } as Meta<typeof Component>;
 
-const Template: StoryFn<typeof Component> = (args) => <Component {...args} />;
+const Template: StoryFn<typeof Component> = (args) => (
+  <Component {...args}>
+    <p style={{ height: "12rem" }}>Example content</p>
+  </Component>
+);
 
 export const Default = Template.bind({});
 Default.args = {};
