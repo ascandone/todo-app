@@ -46,7 +46,7 @@ export const Input: FC<InputProps> = ({
         className={classNames(
           "border py-2 px-3 w-full rounded shadow-sm hover:border-slate-300",
           "transition-color duration-150",
-          "hover:ring focus:ring active:ring-0 ring-slate-300 focus:border-slate-400 outline-none"
+          "hover:ring focus:ring disabled:ring-transparent active:ring-0 ring-slate-300 focus:border-slate-400 outline-none"
         )}
       />
     </div>
