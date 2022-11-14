@@ -43,7 +43,7 @@ export const LoginPage: FC = () => {
     if (loginUser.isLoading) {
       return { type: "submitting" };
     } else if (loginUser.isError) {
-      return { type: "error" };
+      return { type: "error", message: loginUser.error.message };
     } else {
       return { type: "idle" };
     }

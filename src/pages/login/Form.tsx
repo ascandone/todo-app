@@ -1,11 +1,12 @@
 import { FC, FormEventHandler, useState } from "react";
+import { Alert } from "src/components/Alert";
 import { Button } from "src/components/Button";
 import { Input } from "src/components/Input";
 
 export type LoginState =
   | { type: "idle" }
   | { type: "submitting" }
-  | { type: "error" };
+  | { type: "error"; message: string };
 
 export type LoginFormProps = {
   loginState: LoginState;
@@ -27,36 +28,46 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loginState }) => {
   const submitting = loginState.type === "submitting";
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        disabled={submitting}
-        label="Username"
-        placeholder="username"
-        value={username}
-        onInput={setUsername}
-      />
-      <div className="h-6"></div>
-      <Input
-        disabled={submitting}
-        label="Password"
-        type="password"
-        placeholder="••••••"
-        value={password}
-        onInput={setPassword}
-      />
+    <div className="flex flex-col transition-all duration-1000">
+      {loginState.type === "error" ? (
+        <div className="mb-10">
+          <Alert type="error">{loginState.message}</Alert>
+        </div>
+      ) : null}
 
-      <div className="h-10"></div>
-      <div className="flex justify-end">
-        <Button
-          disabled={submitting}
-          loading={submitting}
-          raised
-          fullWidth
-          type="submit"
-        >
-          Log in
-        </Button>
+      <div className="flex-1">
+        <form onSubmit={handleSubmit}>
+          <Input
+            disabled={submitting}
+            label="Username"
+            placeholder="Enter your username"
+            value={username}
+            onInput={setUsername}
+          />
+          <div className="h-6"></div>
+          <Input
+            disabled={submitting}
+            label="Password"
+            type="password"
+            placeholder="••••••"
+            value={password}
+            onInput={setPassword}
+          />
+
+          <div className="h-10" />
+          <div className="flex justify-end">
+            <Button
+              disabled={submitting}
+              loading={submitting}
+              raised
+              fullWidth
+              type="submit"
+            >
+              Log in
+            </Button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 };
