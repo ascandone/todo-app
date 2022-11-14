@@ -16,3 +16,10 @@ Labeled.args = { placeholder: "Placeholder", label: "Label example" };
 
 export const Disabled = Template.bind({});
 Disabled.args = { placeholder: "Placeholder", disabled: true };
+
+export const Error = Template.bind({});
+Error.args = {
+  label: "Password",
+  placeholder: "Placeholder",
+  error: "Invalid password",
+};

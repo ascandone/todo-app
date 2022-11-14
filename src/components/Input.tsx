@@ -12,6 +12,7 @@ export type InputProps = {
   name?: string;
   label?: string;
   disabled?: boolean;
+  error?: string;
 };
 
 export const Input: FC<InputProps> = ({
@@ -23,13 +24,20 @@ export const Input: FC<InputProps> = ({
   label,
   disabled = false,
   type = "text",
+  error,
 }) => {
   const id = useId();
 
   return (
     <div className="max-w-md">
       {label === undefined ? null : (
-        <label className="text-slate-700 mb-1 block text-sm" htmlFor={id}>
+        <label
+          className={classNames(
+            "mb-1 block text-sm",
+            error === undefined ? "text-slate-700" : "text-red-700"
+          )}
+          htmlFor={id}
+        >
           {label}
         </label>
       )}
@@ -44,9 +52,12 @@ export const Input: FC<InputProps> = ({
         name={name}
         autoComplete="off"
         className={classNames(
-          "border py-2 px-3 w-full rounded shadow-sm hover:border-slate-300",
+          "border py-2 px-3 w-full rounded shadow-sm",
           "transition-color duration-150",
-          "hover:ring focus:ring disabled:ring-transparent active:ring-0 ring-slate-300 focus:border-slate-400 outline-none"
+          "hover:ring focus:ring disabled:ring-0 active:ring-0 outline-none",
+          error === undefined
+            ? "ring-slate-300 hover:border-slate-300 focus:border-slate-400"
+            : "ring-red-200 border-red-300 hover:border-red-400 "
         )}
       />
     </div>
