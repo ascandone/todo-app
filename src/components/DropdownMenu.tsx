@@ -58,8 +58,17 @@ export type MenuItemProps = {
   children: ReactNode;
 } & MenuItemType;
 
-export const MenuItem: FC<MenuItemProps> = ({ icon: Icon, children }) => (
+export const MenuItem: FC<MenuItemProps> = ({
+  icon: Icon,
+  children,
+  ...props
+}) => (
   <button
+    onClick={() => {
+      if (props.type === "button") {
+        props.onClick();
+      }
+    }}
     type="button"
     className="flex gap-x-4 text-gray-800 transition-colors duration-150 hover:bg-gray-100 rounded py-2 px-2 w-full"
   >
