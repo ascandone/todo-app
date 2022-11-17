@@ -6,6 +6,8 @@ export type Type = "text" | "password" | "email";
 export type InputProps = {
   value: string;
   onInput: (value: string) => void;
+  onFocus?: VoidFunction;
+  onBlur?: VoidFunction;
   type?: Type;
   placeholder?: string;
   autofocus?: boolean;
@@ -25,6 +27,8 @@ export const Input: FC<InputProps> = ({
   disabled = false,
   type = "text",
   error,
+  onBlur,
+  onFocus,
 }) => {
   const id = useId();
 
@@ -45,6 +49,8 @@ export const Input: FC<InputProps> = ({
         disabled={disabled}
         id={id}
         value={value}
+        onFocus={onFocus}
+        onBlur={onBlur}
         onChange={(e) => onInput(e.target.value)}
         type={type}
         placeholder={placeholder}
