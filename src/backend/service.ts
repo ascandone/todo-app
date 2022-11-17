@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { Auth } from "./service/auth";
+import { Result } from "src/data/result";
+import { Auth, Credentials, LoginError } from "./service/auth";
 
 export type Todo = {
   id: number;
@@ -51,7 +52,7 @@ export async function createUser(args: {
 export async function loginUser(args: {
   username: string;
   password: string;
-}): Promise<User | null> {
+}): Promise<Result<Credentials, LoginError>> {
   return auth.loginUser(args);
 }
 
