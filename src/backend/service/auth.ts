@@ -15,12 +15,14 @@ export interface IUserEntity {
   hashedPassword: string;
 }
 
+export type CreateUserError = "user_already_exists";
+
 export interface AuthService<UserEntity> {
   findUserByUsername(username: string): Promise<UserEntity | null>;
   createUser(user: {
     username: string;
     hashedPassword: string;
-  }): Promise<UserEntity>;
+  }): Promise<Result<UserEntity, CreateUserError>>;
 }
 
 export type LoginError =
@@ -97,19 +99,43 @@ export class Auth<UserEntity extends IUserEntity> {
     }
   }
 
-  async registerUser(args: { username: string; password: string }) {
+  async registerUser(args: {
+    username: string;
+    password: string;
+  }): Promise<Result<Credentials, RegisterUserError>> {
     const hashedPassword = await hash(args.password, saltRounds);
 
-    const newUser = await this.service.createUser({
+    const newUserResult = await this.service.createUser({
       username: args.username,
       hashedPassword,
     });
 
+    if (newUserResult.type === "error") {
+      return {
+        type: "error",
+        error: castError(newUserResult.error),
+      };
+    }
+
+    const newUser = newUserResult.value;
+
     const authToken = this.signUser(newUser);
 
     return {
-      username: newUser.username,
-      authToken,
+      type: "ok",
+      value: {
+        username: newUser.username,
+        authToken,
+      },
     };
   }
 }
+
+export type RegisterUserError = "user_already_exists";
+
+const castError = (createUserError: CreateUserError): RegisterUserError => {
+  switch (createUserError) {
+    case "user_already_exists":
+      return "user_already_exists";
+  }
+};

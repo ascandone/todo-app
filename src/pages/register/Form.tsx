@@ -5,7 +5,7 @@ import { Input } from "src/components/Input";
 export type RegisterState =
   | { type: "idle" }
   | { type: "submitting" }
-  | { type: "error" };
+  | { type: "error"; message: string };
 
 export type RegisterFormProps = {
   registerState: RegisterState;

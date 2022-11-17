@@ -10,8 +10,10 @@ import type { LoginError } from "src/backend/service/auth";
 export const LoginPageUi: FC<{
   loginState: LoginState;
   onSubmit: LoginFormProps["onSubmit"];
+  error?: string;
 }> = ({ onSubmit, loginState }) => (
   <CenterForm
+    error={loginState.type === "error" ? loginState.message : undefined}
     header="Log in"
     bottom={
       <>
