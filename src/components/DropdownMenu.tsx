@@ -1,16 +1,7 @@
 import { FC, Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { Transition } from "@headlessui/react";
-
-const IconButton: FC<{ onClick: VoidFunction }> = ({ onClick }) => (
-  <button
-    onClick={onClick}
-    type="button"
-    className="group-hover:block inline hover:bg-zinc-100 rounded-md p-1 -m-1"
-  >
-    <EllipsisVerticalIcon className="text-black h-6 w-6" />
-  </button>
-);
+import { IconButton } from "src/components/IconButton";
 
 const Menu: FC<{ children: ReactNode; onClickOutside: VoidFunction }> = ({
   children,
@@ -85,8 +76,10 @@ export const DropdownMenu: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <div>
       <span className="relative">
-        {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
         <IconButton
+          size="large"
+          ariaLabel="open menu"
+          icon={EllipsisVerticalIcon}
           onClick={() => {
             setOpened(!opened);
           }}
