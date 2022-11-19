@@ -49,7 +49,7 @@ export const TodoItem: FC<{
         )}
       >
         <CheckBox
-          ariaLabel="Toggle item"
+          ariaLabel="toggle item"
           checked={todo.completed}
           onToggle={onToggle}
         />

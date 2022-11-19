@@ -6,7 +6,7 @@
   "scripts": {
     "vercel-dev": "vite --port $PORT",
     "vdev": "vercel dev --local-config ./vercel-dev.json",
-    "vercel-build": "prisma generate && prisma migrate deploy && npm run build",
+    "vercel-build": "prisma generate && npm run db:migrate && npm run build",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --port 3000",
@@ -14,6 +14,7 @@
     "test:run": "vitest --run --coverage",
     "storybook": "storybook dev -p 6006 -h localhost",
     "build-storybook": "storybook build",
+    "db:migrate": "prisma migrate deploy",
     "cypress": "cypress open --e2e",
     "cypress:run": "wait-on http://localhost:3000 && cypress run",
     "ts:check": "tsc",

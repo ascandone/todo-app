@@ -16,6 +16,7 @@ export const CheckBox: FC<{
       aria-label={ariaLabel}
     />
     <button
+      aria-label={ariaLabel}
       type="button"
       onClick={() => onToggle(!value)}
       className={classNames(
