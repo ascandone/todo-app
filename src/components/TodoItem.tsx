@@ -54,7 +54,7 @@ export const TodoItem: FC<{
           onToggle={onToggle}
         />
         <span
-          className="mx-4 flex-1 cursor-pointer inline-flex"
+          className="mx-4 flex-1 cursor-pointer inline-flex translate-y-px"
           onClick={openDraft}
         >
           {draft === undefined ? (
