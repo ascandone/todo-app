@@ -12,7 +12,7 @@ export const CheckBox: FC<{
       type="checkbox"
       checked={value}
       onChange={() => onToggle(!value)}
-      className="sr-only"
+      className="hidden"
       aria-label={ariaLabel}
     />
     <button
@@ -21,7 +21,8 @@ export const CheckBox: FC<{
       onClick={() => onToggle(!value)}
       className={classNames(
         "cursor-pointer border border-slate-300 rounded-md shadow-sm w-5 h-5 flex items-center justify-center ring-slate-300 ",
-        "transition-colors duration-150 ease-in-out",
+        "transition-all duration-150 ease-in-out",
+        "active:scale-95 ",
         {
           "hover:bg-slate-300": !value,
           "bg-slate-800 border-slate-800 hover:bg-slate-700": value,
