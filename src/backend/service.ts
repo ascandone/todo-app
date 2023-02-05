@@ -1,5 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-import { Auth } from "./service/auth";
+import { Result } from "src/data/result";
+import {
+  Auth,
+  CreateUserError as RegisterUser,
+  Credentials,
+  LoginError,
+} from "./service/auth";
 
 export type Todo = {
   id: number;
@@ -15,6 +21,18 @@ const todoSelection = { id: true, completed: true, text: true } as const;
 
 const auth = new Auth({
   async createUser({ username, hashedPassword }) {
+    const existingUser = await prisma.user.findFirst({
+      where: { username },
+      select: { id: true },
+    });
+
+    if (existingUser !== null) {
+      return {
+        type: "error",
+        error: "user_already_exists",
+      };
+    }
+
     const newUser = await prisma.user.create({
       data: {
         username,
@@ -22,7 +40,7 @@ const auth = new Auth({
       },
     });
 
-    return newUser;
+    return { type: "ok", value: newUser };
   },
 
   async findUserByUsername(username) {
@@ -41,17 +59,17 @@ export type User = {
   authToken: string;
 };
 
-export async function createUser(args: {
+export async function registerUser(args: {
   username: string;
   password: string;
-}): Promise<User> {
+}): Promise<Result<User, RegisterUser>> {
   return auth.registerUser(args);
 }
 
 export async function loginUser(args: {
   username: string;
   password: string;
-}): Promise<User | null> {
+}): Promise<Result<Credentials, LoginError>> {
   return auth.loginUser(args);
 }
 

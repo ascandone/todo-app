@@ -1,8 +1,9 @@
 import { FC, useState } from "react";
 import classNames from "classnames";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { CheckBox } from "src/components/CheckBox";
-import { TrashButton } from "src/components/TrashButton";
 import type { Todo } from "src/backend/service";
+import { IconButton } from "src/components/IconButton";
 
 const LineThrough: FC<{ completed: boolean }> = ({ completed }) => (
   <div
@@ -48,12 +49,12 @@ export const TodoItem: FC<{
         )}
       >
         <CheckBox
-          ariaLabel="Toggle item"
+          ariaLabel="toggle item"
           checked={todo.completed}
           onToggle={onToggle}
         />
         <span
-          className="mx-4 flex-1 cursor-pointer inline-flex"
+          className="mx-4 flex-1 cursor-pointer inline-flex translate-y-px"
           onClick={openDraft}
         >
           {draft === undefined ? (
@@ -82,7 +83,12 @@ export const TodoItem: FC<{
             />
           )}
         </span>
-        <TrashButton ariaLabel="Delete the item" onClick={onDelete} />
+        <IconButton
+          dark
+          icon={TrashIcon}
+          ariaLabel="Delete the item"
+          onClick={onDelete}
+        />
       </div>
     </div>
   );

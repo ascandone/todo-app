@@ -12,7 +12,7 @@ const ButtonSpinner: FC<{ show: boolean }> = ({ show }) => (
   >
     <Transition
       show={show}
-      enter="transition ease-out duration-300"
+      enter="transition ease-out duration-500"
       enterFrom="opacity-0 rotate-x-45"
       enterTo="opacity-100 rotate-x-0"
     >

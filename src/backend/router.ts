@@ -46,7 +46,7 @@ const registerUser = t.procedure
       password: z.string(),
     })
   )
-  .mutation((req) => service.createUser(req.input));
+  .mutation((req) => service.registerUser(req.input));
 
 const loginUser = t.procedure
   .input(

@@ -15,15 +15,6 @@ const rotateX = plugin(function ({ addUtilities }) {
       },
     });
   }
-
-  // addUtilities({
-  //   ".rotate-x-0": {
-  //     transform: `rotateX(0) translateZ(20px)`,
-  //   },
-  //   ".rotate-x-90": {
-  //     transform: `rotateX(45deg) translateZ(20px)`,
-  //   },
-  // });
 });
 
 /** @type {import('tailwindcss').Config} */
@@ -33,6 +24,10 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: "Inter",
+      },
+
+      boxShadow: {
+        soft: "0 2px 32px 0px rgb(0 0 0 / 12%)",
       },
     },
   },

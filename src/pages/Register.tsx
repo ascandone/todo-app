@@ -1,5 +1,6 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CreateUserError } from "src/backend/service/auth";
 import { CenterForm } from "src/components/CenterForm";
 import { Link } from "src/components/Link";
 import {
@@ -15,6 +16,7 @@ export const RegisterPageUi: FC<{
   onSubmit: RegisterFormProps["onSubmit"];
 }> = ({ onSubmit, registerState }) => (
   <CenterForm
+    error={registerState.type === "error" ? registerState.message : undefined}
     header="Create account"
     bottom={
       <>
@@ -26,6 +28,13 @@ export const RegisterPageUi: FC<{
   </CenterForm>
 );
 
+const errorToMessage = (error: CreateUserError): string => {
+  switch (error) {
+    case "user_already_exists":
+      return "User already exists";
+  }
+};
+
 export const RegisterPage: FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
@@ -35,10 +44,21 @@ export const RegisterPage: FC = () => {
     }
   }, [auth.credentials]);
 
+  const [error, setError] = useState<CreateUserError | undefined>(undefined);
+
   const registerUser = trpc.registerUser.useMutation({
-    onSuccess(user) {
-      if (user) {
-        auth.login(user);
+    onMutate() {
+      setError(undefined);
+    },
+    onSuccess(userResult) {
+      switch (userResult.type) {
+        case "ok":
+          auth.login(userResult.value);
+          break;
+
+        case "error":
+          setError(userResult.error);
+          break;
       }
     },
   });
@@ -47,7 +67,9 @@ export const RegisterPage: FC = () => {
     if (registerUser.isLoading) {
       return { type: "submitting" };
     } else if (registerUser.isError) {
-      return { type: "error" };
+      return { type: "error", message: "Error during signup" };
+    } else if (error !== undefined) {
+      return { type: "error", message: errorToMessage(error) };
     } else {
       return { type: "idle" };
     }

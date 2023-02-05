@@ -1,5 +1,6 @@
 import { hash, compare } from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
+import type { Result } from "src/data/result";
 
 const SECRET = "secret"; // TODO get from env
 const saltRounds = 10;
@@ -14,13 +15,24 @@ export interface IUserEntity {
   hashedPassword: string;
 }
 
+export type CreateUserError = "user_already_exists";
+
 export interface AuthService<UserEntity> {
   findUserByUsername(username: string): Promise<UserEntity | null>;
   createUser(user: {
     username: string;
     hashedPassword: string;
-  }): Promise<UserEntity>;
+  }): Promise<Result<UserEntity, CreateUserError>>;
 }
+
+export type LoginError =
+  | { type: "user_not_found" }
+  | { type: "invalid_password" };
+
+export type Credentials = {
+  username: string;
+  authToken: string;
+};
 
 export class Auth<UserEntity extends IUserEntity> {
   constructor(private readonly service: AuthService<UserEntity>) {}
@@ -34,23 +46,35 @@ export class Auth<UserEntity extends IUserEntity> {
     return sign(payload, SECRET);
   }
 
-  async loginUser(args: { username: string; password: string }) {
+  async loginUser(args: {
+    username: string;
+    password: string;
+  }): Promise<Result<Credentials, LoginError>> {
     const user = await this.service.findUserByUsername(args.username);
 
     if (user === null) {
-      return null;
+      return {
+        type: "error",
+        error: { type: "user_not_found" },
+      };
     }
 
     const isValid = await compare(args.password, user.hashedPassword);
     if (!isValid) {
-      return null;
+      return {
+        type: "error",
+        error: { type: "invalid_password" },
+      };
     }
 
     const authToken = this.signUser(user);
 
     return {
-      username: args.username,
-      authToken,
+      type: "ok",
+      value: {
+        username: args.username,
+        authToken,
+      },
     };
   }
 
@@ -75,19 +99,43 @@ export class Auth<UserEntity extends IUserEntity> {
     }
   }
 
-  async registerUser(args: { username: string; password: string }) {
+  async registerUser(args: {
+    username: string;
+    password: string;
+  }): Promise<Result<Credentials, RegisterUserError>> {
     const hashedPassword = await hash(args.password, saltRounds);
 
-    const newUser = await this.service.createUser({
+    const newUserResult = await this.service.createUser({
       username: args.username,
       hashedPassword,
     });
 
+    if (newUserResult.type === "error") {
+      return {
+        type: "error",
+        error: castError(newUserResult.error),
+      };
+    }
+
+    const newUser = newUserResult.value;
+
     const authToken = this.signUser(newUser);
 
     return {
-      username: newUser.username,
-      authToken,
+      type: "ok",
+      value: {
+        username: newUser.username,
+        authToken,
+      },
     };
   }
 }
+
+export type RegisterUserError = "user_already_exists";
+
+const castError = (createUserError: CreateUserError): RegisterUserError => {
+  switch (createUserError) {
+    case "user_already_exists":
+      return "user_already_exists";
+  }
+};

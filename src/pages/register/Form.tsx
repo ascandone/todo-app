@@ -5,7 +5,7 @@ import { Input } from "src/components/Input";
 export type RegisterState =
   | { type: "idle" }
   | { type: "submitting" }
-  | { type: "error" };
+  | { type: "error"; message: string };
 
 export type RegisterFormProps = {
   registerState: RegisterState;
@@ -33,6 +33,7 @@ export const RegisterForm: FC<RegisterFormProps> = ({
     <form onSubmit={handleSubmit}>
       <Input
         disabled={submitting}
+        name="username"
         label="Username"
         placeholder="username"
         value={username}
@@ -41,6 +42,7 @@ export const RegisterForm: FC<RegisterFormProps> = ({
       <div className="h-6"></div>
       <Input
         disabled={submitting}
+        name="password"
         label="Password"
         type="password"
         placeholder="••••••"

@@ -8,9 +8,8 @@ import {
   AuthStatus,
   useProtectedRoute,
 } from "src/providers/Auth";
-import { Button } from "src/components/Button";
 import { Todo } from "src/backend/service";
-import { pluralizeWord } from "src/utils/misc";
+import { AppOverview } from "./index/AppOverview";
 
 export const LoadingScreen: FC = () => (
   <div className="flex items-center justify-center p-16">
@@ -87,31 +86,11 @@ const AuthenticatedPage: FC<{
     return <ErrorScreen />;
   }
 
-  // TODO properly pluralize "tasks"
   const itemsLeft = todos.data.filter((todo) => !todo.completed).length;
 
   return (
     <div className="p-5">
-      <div className="mx-auto max-w-md pt-2">
-        <div className="flex justify-between items-start">
-          {/* Data */}
-          <div>
-            <h2 className="text-xl font-medium text-gray-800">
-              Hello, {auth.credentials.username}
-            </h2>
-            <div className="h-2"></div>
-            <p className="font-xs text-gray-500">
-              You&apos;ve got {itemsLeft} {pluralizeWord(itemsLeft, "task")}{" "}
-              left{" "}
-            </p>
-          </div>
-          <div>
-            <Button variant="ghost" type="button" onClick={() => auth.logout()}>
-              Logout
-            </Button>
-          </div>
-        </div>
-      </div>
+      <AppOverview auth={auth} itemsLeft={itemsLeft} />
       <TodoApp
         todos={todos.data}
         createTodo={(text) => {

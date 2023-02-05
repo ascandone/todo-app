@@ -16,18 +16,25 @@ const Template: StoryFn<typeof Component> = (args) => <Component {...args} />;
 export const Default = Template.bind({});
 Default.args = { loginState: { type: "idle" } };
 
-const AnimatedUi: FC = () => {
-  const [loading, setLoading] = useState(false);
+export const Error = Template.bind({});
+Error.args = {
+  loginState: {
+    type: "error",
+    message: "Invalid password",
+  },
+};
 
-  const loginState: LoginState = loading
-    ? { type: "submitting" }
-    : { type: "idle" };
+const AnimatedUi: FC = () => {
+  const [loginState, setLoginState] = useState<LoginState>({ type: "idle" });
 
   return (
     <Component
       loginState={loginState}
       onSubmit={() => {
-        setLoading(true);
+        setLoginState({ type: "submitting" });
+        setTimeout(() => {
+          setLoginState({ type: "error", message: "Invalid credentials" });
+        }, 1000);
       }}
     />
   );
