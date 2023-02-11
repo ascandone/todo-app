@@ -12,11 +12,13 @@ const defaultArgs: AlertProps = { children: "Alert content" };
 
 export const Default = Template.bind({});
 Default.args = {
+  onDelete() {},
   ...defaultArgs,
 };
 
 export const Error = Template.bind({});
 Error.args = {
   ...defaultArgs,
+  onDelete() {},
   type: "error",
 };
