@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { trpc } from "src/utils/trpc";
 import { Spinner } from "src/components/Spinner";
 import { TodoApp } from "src/pages/index/TodoApp";
