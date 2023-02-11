@@ -86,9 +86,6 @@ const AuthenticatedPage: FC<{
     return <ErrorScreen />;
   }
 
-  // remove token if error
-  useEffect(() => {}, []);
-
   const itemsLeft = todos.data.filter((todo) => !todo.completed).length;
 
   return (
