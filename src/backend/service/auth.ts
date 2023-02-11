@@ -43,7 +43,7 @@ export class Auth<UserEntity extends IUserEntity> {
       password: user.hashedPassword,
     };
 
-    return sign(payload, SECRET);
+    return sign(payload, SECRET, { expiresIn: "300d" });
   }
 
   async loginUser(args: {
