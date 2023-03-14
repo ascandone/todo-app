@@ -8,6 +8,12 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 
+function getJWTExpireDate(jwtToken: string) {
+  const [, payload] = jwtToken.split(".");
+  const parsed = JSON.parse(window.atob(payload));
+  return new Date(parsed.exp * 1000);
+}
+
 export type AuthCredentials = {
   username: string;
   authToken: string;
@@ -78,7 +84,16 @@ const getCredentials = (): AuthCredentials | undefined => {
   }
 
   // TODO use zod
-  return JSON.parse(storage);
+  const payload = JSON.parse(storage);
+
+  const expireDate = getJWTExpireDate(payload.authToken);
+  const now = new Date();
+
+  if (expireDate < now) {
+    return undefined;
+  }
+
+  return payload;
 };
 
 export const useProtectedRoute = () => {

@@ -2,7 +2,7 @@
   "name": "react-starter-template",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "vercel-dev": "vite --port $PORT",
     "vdev": "vercel dev --local-config ./vercel-dev.json",
