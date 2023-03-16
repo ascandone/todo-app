@@ -1,3 +1,5 @@
+> An overview of the project is present at [ascandone.dev/projects/todo-app](https://ascandone.dev/projects/todo-app)
+
 A simple app using the following tools:
 
 - [react](https://reactjs.org/)
