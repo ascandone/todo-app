@@ -3,10 +3,11 @@ import { Alert } from "src/components/Alert";
 
 export const CenterForm: FC<{
   header: string;
+  info?: ReactNode;
   children: ReactNode;
   bottom: ReactNode;
   error?: string;
-}> = ({ header, children, bottom, error }) => {
+}> = ({ header, children, bottom, error, info = null }) => {
   const [showError, setShowError] = useState(error !== undefined);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const CenterForm: FC<{
           </Alert>
         </div>
       )}
-
+      {info}
       {children}
       <div className="h-2"></div>
       <p className="mt-7 text-center text-slate-700 text-sm">{bottom}</p>

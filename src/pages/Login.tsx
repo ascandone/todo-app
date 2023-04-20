@@ -14,6 +14,12 @@ export const LoginPageUi: FC<{
 }> = ({ onSubmit, loginState }) => (
   <CenterForm
     error={loginState.type === "error" ? loginState.message : undefined}
+    info={
+      <p className="mb-4 text-xs text-zinc-500 max-w-xs mx-auto text-center">
+        You can login without registering with these mock credentials: user=
+        <b>example</b>, password=<b>password</b>
+      </p>
+    }
     header="Log in"
     bottom={
       <>
